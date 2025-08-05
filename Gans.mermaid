@@ -1,0 +1,121 @@
+graph TD
+
+%% === Mapping Network ===
+subgraph Mapping_Network
+    z[Latent z in Z] --> normz[Normalize]
+    normz --> fc[8x FC Layers]
+    fc --> w[Style vector w in W]
+end
+
+%% === Constant Input ===
+w --> const4x4[Const Input 4x4x512]
+
+%% === 4x4 Block ===
+subgraph Block_4x4
+    const4x4 --> conv4a[Conv 4x4 A]
+    conv4a --> conv4b[Conv 4x4 B]
+    conv4b --> toRGB4[ToRGB 4x4]
+end
+w --> conv4a
+w --> conv4b
+noise1[Noise] --> conv4a
+noise2[Noise] --> conv4b
+
+%% === 8x8 Block ===
+subgraph Block_8x8
+    conv4b --> up8[Upsample to 8x8]
+    up8 --> conv8a[Conv 8x8 A]
+    conv8a --> conv8b[Conv 8x8 B]
+    conv8b --> toRGB8[ToRGB 8x8]
+end
+w --> conv8a
+w --> conv8b
+noise3[Noise] --> conv8a
+noise4[Noise] --> conv8b
+
+%% === 16x16 Block ===
+subgraph Block_16x16
+    conv8b --> up16[Upsample to 16x16]
+    up16 --> conv16a[Conv 16x16 A]
+    conv16a --> conv16b[Conv 16x16 B]
+    conv16b --> toRGB16[ToRGB 16x16]
+end
+w --> conv16a
+w --> conv16b
+noise5[Noise] --> conv16a
+noise6[Noise] --> conv16b
+
+%% === 32x32 Block ===
+subgraph Block_32x32
+    conv16b --> up32[Upsample to 32x32]
+    up32 --> conv32a[Conv 32x32 A]
+    conv32a --> conv32b[Conv 32x32 B]
+    conv32b --> toRGB32[ToRGB 32x32]
+end
+w --> conv32a
+w --> conv32b
+noise7[Noise] --> conv32a
+noise8[Noise] --> conv32b
+
+%% === 64x64 Block ===
+subgraph Block_64x64
+    conv32b --> up64[Upsample to 64x64]
+    up64 --> conv64a[Conv 64x64 A]
+    conv64a --> conv64b[Conv 64x64 B]
+    conv64b --> toRGB64[ToRGB 64x64]
+end
+w --> conv64a
+w --> conv64b
+noise9[Noise] --> conv64a
+noise10[Noise] --> conv64b
+
+%% === 128x128 Block ===
+subgraph Block_128x128
+    conv64b --> up128[Upsample to 128x128]
+    up128 --> conv128a[Conv 128x128 A]
+    conv128a --> conv128b[Conv 128x128 B]
+    conv128b --> toRGB128[ToRGB 128x128]
+end
+w --> conv128a
+w --> conv128b
+noise11[Noise] --> conv128a
+noise12[Noise] --> conv128b
+
+%% === 256x256 Block ===
+subgraph Block_256x256
+    conv128b --> up256[Upsample to 256x256]
+    up256 --> conv256a[Conv 256x256 A]
+    conv256a --> conv256b[Conv 256x256 B]
+    conv256b --> toRGB256[ToRGB 256x256]
+end
+w --> conv256a
+w --> conv256b
+noise13[Noise] --> conv256a
+noise14[Noise] --> conv256b
+
+%% === 512x512 Block ===
+subgraph Block_512x512
+    conv256b --> up512[Upsample to 512x512]
+    up512 --> conv512a[Conv 512x512 A]
+    conv512a --> conv512b[Conv 512x512 B]
+    conv512b --> toRGB512[ToRGB 512x512]
+end
+w --> conv512a
+w --> conv512b
+noise15[Noise] --> conv512a
+noise16[Noise] --> conv512b
+
+%% === 1024x1024 Block ===
+subgraph Block_1024x1024
+    conv512b --> up1024[Upsample to 1024x1024]
+    up1024 --> conv1024a[Conv 1024x1024 A]
+    conv1024a --> conv1024b[Conv 1024x1024 B]
+    conv1024b --> toRGB1024[ToRGB 1024x1024]
+end
+w --> conv1024a
+w --> conv1024b
+noise17[Noise] --> conv1024a
+noise18[Noise] --> conv1024b
+
+%% Final output
+toRGB1024 --> output[Final Image Output 1024x1024]
